@@ -52,7 +52,7 @@ public class Item{
 	}
 
 	public void setStock(boolean isStock, int stockAmmount){
-		this.isStock = inStock;
+		this.inStock = inStock;
 		if (!isStock){
 			stockAmmount = 0;
 		}else{
