@@ -1,5 +1,7 @@
 public class Store{
 
+	Item[] stock;
+
 	public Store(){
 
 	}
