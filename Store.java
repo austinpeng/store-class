@@ -4,35 +4,77 @@ public class Store{
 	ArrayList<Item> stock = new ArrayList<Item>();
 	ArrayList<String> itemNames = new ArrayList<String>();
 	String storeName;
+	String owner;
+	String phoneNumber;
+	double longitude, latiutude;
 
 	public Store(){
 		storeName = "New Store";
+		owner = "NaP";
 	}
 
-	public Store(String name){
+	public Store(String name, String owner, String phoneNumber, double lon, double lat){
 		storeName = name;
+		this.owner = owner;
+		this.phoneNumber = phoneNumber;
+		this.longitude = lon;
+		this.latiutude = lat;
 	}
 
-	public Store(String name, ArrayList<Item> items){
-		stock = items;
-		storeName = name;
-		for(Item i : items) itemNames.add(i.getName());
+	public void setNewOwner(String owner){
+		this.owner = owner;
+	}
+
+	public void setPhoneNum(String phoneNum){
+		this.phoneNumber = phoneNumber;
+	}
+
+	public void setLocation(double lat, double lon){
+		this.latiutude = lat;
+		this.longitude = lon;
 	}
 
 	public void addItem(Item newItem){
 		stock.add(newItem);
+		itemNames.add(newItem.getName());
 	}
 
-	public void addNewItem(String itemName){
-		stock.add(new Item(itemName));
+	public void addNewItem(String itemName, int amount, double sellPrice, double buyPrice, String description){
+		stock.add(new Item(itemName, sellPrice, buyPrice, amount, description));
 	}
 
-	public void addNewItem(String itemName, int amount){
-		stock.add(new Item(itemName, amount));
+	public boolean buyItemWithName(String name, int numberOfItems){
+		if(stock.get(itemNames.indexOf(name)).soldItem(numberOfItems)) {
+			return true;
+		}else{
+			return false;
+		}
 	}
 
-	public void addNewItem(String itemName, int amount, double sellPrice, double buyPrice){
-		stock.add(new Item(itemName, sellPrice, buyPrice, amount));
+	public void removeItem(String name){
+		int index = itemNames.indexOf(name);
+		stock.remove(index);
+		itemNames.remove(index);
+	}
+
+	public double searchItemSellPrice(String itemName){
+		int index = itemNames.indexOf(itemName);
+		return stock.get(index).getSellPrice();
+	}
+
+	public double searchItemBuyPrice(String itemName){
+		int index = itemNames.indexOf(itemName);
+		return stock.get(index).getBuyPrice();	
+	}
+
+	public int searchItemStock(String itemName){
+		int index = itemNames.indexOf(itemName);
+		return stock.get(index).getAmout();
+	}
+
+	public boolean searchIsInStock(String itemName){
+		int index = itemNames.indexOf(itemName);
+		return stock.get(index).isInStock();
 	}
 
 }
@@ -43,18 +85,14 @@ class Item{
 	private boolean inStock;
 	private int amount;
 	private String name;
+	private String description;
 
-	public Item(String name, double sellPrice, double buyPrice){
-		this.name = name;
-		this.sellPrice = sellPrice;
-		this.buyPrice = buyPrice;
-	}
-
-	public Item(String name, double sellPrice, double buyPrice, int amount){
+	public Item(String name, double sellPrice, double buyPrice, int amount, String description){
 		this.name = name;
 		this.sellPrice = sellPrice;
 		this.buyPrice = buyPrice;
 		this.amount = amount;
+		this.description = description;
 		if (amount > 0) this.inStock = true;
 	}
 
@@ -77,8 +115,14 @@ class Item{
 		amount += numberOfItems;
 	}
 
-	public void soldItem(int numberOfItems){
+	public boolean soldItem(int numberOfItems){
+		if(amount < 1) return false;
 		amount -= numberOfItems;
+		return true;
+	}
+
+	public void setDescription(String description){
+		this.description = description;
 	}
 
 	public void setItemAmount(int newAmount) {
@@ -120,6 +164,10 @@ class Item{
 
 	public boolean isInStock(){
 		return inStock;
+	}
+
+	public String getDescription(){
+		return description;
 	}
 
 }
