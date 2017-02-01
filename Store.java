@@ -70,7 +70,7 @@ public class Store{
 	public int searchItemStock(String itemName){
 		int index = itemNames.indexOf(itemName);
 		return stock.get(index).getAmout();
-	}
+	} 
 
 	public boolean searchIsInStock(String itemName){
 		int index = itemNames.indexOf(itemName);
