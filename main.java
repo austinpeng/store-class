@@ -1,9 +1,18 @@
 import java.util.Scanner;
 import java.util.ArrayList;
-//import Store;
-public class main{
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
+//import Store
+public class main extends JFrame implements ActionListener{
 	static Scanner sc = new Scanner(System.in);
-	static ArrayList<Store> stores = new ArrayList<Store>();
+	static Store stores = new Store();
+
+	JButton searchForItem = new JButton("Search");
+	JButton buyItem = new JButton("Buy Item");
+	JButton newItem = new JButton("New Item");
+	JButton storckItem = new JButton("Stock Item");
 
 	public static void main(String[] args){
 		System.out.println("Do you want to create a new store or see an existing one?");
@@ -27,21 +36,50 @@ public class main{
 		System.out.println("What is the location (Latitude Longitude) of the store?");
 		double lat = sc.nextDouble();
 		double lon = sc.nextDouble();
-		stores.add(new Store(name, owner, number, lat, lon));
+		stores = new Store(name, owner, number, lat, lon);
+		doAction();
 	}
 
 	public static void defaultStore(){
-		stores.add(new Store("Default", "defaultOwner", "9738738224", 74, -77));
+		stores = new Store("Default", "defaultOwner", "9738738224", 74, -77);		
+		doAction();
+	}
+
+	public static void doAction(){
+		System.out.println("What action do you want to do?\n(add, buy, remove, search)");
+		switch(sc.next()){
+			case "add" : add(); break;
+			case "buy" : search(); break;
+			case "remove" : remove(); break;
+			case "search" : search(); break;
+			default : break;
+		} 		
+	}
+
+		@Override
+	public void actionPerformed(ActionEvent e){
+	}
+
+	public static void search(){
+		System.out.println("Please type the name of the item");
+		String name = sc.next();
+	}
+
+	public static void add(){
+		System.out.println("Please type the name of the item");
+		String name = sc.next();
+	}
+
+	public static void remove(){
+		System.out.println("Please type the name of the item");
+		String name = sc.next();
+	}
+
+	public static void buy(){
+		System.out.println("Please type the name of the item");
+		String name = sc.next();
 	}
 
 
-
-
-
-
-
-
-
-
-
+	
 }
