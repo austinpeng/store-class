@@ -24,7 +24,7 @@ public class main extends JFrame implements ActionListener{
 
 	public static void main(String[] args){
 		thisGUI = new main("TEST");
-		thisGUI.setSize(475, 500);
+		thisGUI.setSize(650, 500);
 		thisGUI.setVisible(true);
 		defaultStore();
 
@@ -47,6 +47,7 @@ public class main extends JFrame implements ActionListener{
 		fiveButtons.add(removeItem);
 		fiveButtons.add(buyItem);
 		gui.add(fiveButtons);
+
 	}
 
 	public static void defaultStore(){
