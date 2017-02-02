@@ -2,7 +2,7 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
@@ -15,7 +15,9 @@ public class main extends JFrame implements ActionListener{
 	JButton buyItem = new JButton("Buy Item");
 	JButton newItem = new JButton("New Item");
 	JButton removeItem = new JButton("Remove Item");
-	JButton storckItem = new JButton("Stock Item");
+	JButton stockItem = new JButton("Stock Item");
+
+	JPanel fiveButtons = new JPanel(new GridLayout(1, 5));
 
 	static  main thisGUI;
 
@@ -24,40 +26,32 @@ public class main extends JFrame implements ActionListener{
 		thisGUI = new main("TEST");
 		thisGUI.setSize(475, 500);
 		thisGUI.setVisible(true);
-
-		//System.out.println("Do you want to create a new store or see an existing one?");
-		//if(sc.next().contains("new")){
-		//	MakeNewStore();
-		//}else{
 		defaultStore();
-		//}
 
 	}
+
+	JPanel gui = new JPanel(new GridLayout(0, 1));
 
 	public main(String name){
 		super(name);
-	}
 
-	public static void MakeNewStore(){
-		System.out.println("What is the name of the new store?");
-		String name = sc.next();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setContentPane(gui);
 
-		System.out.println("What is your name?");
-		String owner = sc.next();
+		gui.setBorder(new EmptyBorder(5, 5, 5, 5));
+		gui.setLayout(new FlowLayout());
 
-		System.out.println("What is your phone number?");
-		String number = sc.next();
-
-		System.out.println("What is the location (Latitude Longitude) of the store?");
-		double lat = sc.nextDouble();
-		double lon = sc.nextDouble();
-		stores = new Store(name, owner, number, lat, lon);
-		doAction();
+		fiveButtons.add(searchForItem);
+		fiveButtons.add(newItem);
+		fiveButtons.add(stockItem);
+		fiveButtons.add(removeItem);
+		fiveButtons.add(buyItem);
+		gui.add(fiveButtons);
 	}
 
 	public static void defaultStore(){
 		stores = new Store("Default", "defaultOwner", "9738738224", 74, -77);		
-		doAction();
+		Item firstStoreItem = new Item("");
 	}
 
 		@Override
