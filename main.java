@@ -1,5 +1,7 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -12,15 +14,28 @@ public class main extends JFrame implements ActionListener{
 	JButton searchForItem = new JButton("Search");
 	JButton buyItem = new JButton("Buy Item");
 	JButton newItem = new JButton("New Item");
+	JButton removeItem = new JButton("Remove Item");
 	JButton storckItem = new JButton("Stock Item");
 
+	static  main thisGUI;
+
+
 	public static void main(String[] args){
-		System.out.println("Do you want to create a new store or see an existing one?");
-		if(sc.next().contains("new")){
-			MakeNewStore();
-		}else{
-			defaultStore();
-		}
+		thisGUI = new main("TEST");
+		thisGUI.setSize(475, 500);
+		thisGUI.setVisible(true);
+
+		//System.out.println("Do you want to create a new store or see an existing one?");
+		//if(sc.next().contains("new")){
+		//	MakeNewStore();
+		//}else{
+		defaultStore();
+		//}
+
+	}
+
+	public main(String name){
+		super(name);
 	}
 
 	public static void MakeNewStore(){
@@ -45,41 +60,30 @@ public class main extends JFrame implements ActionListener{
 		doAction();
 	}
 
-	public static void doAction(){
-		System.out.println("What action do you want to do?\n(add, buy, remove, search)");
-		switch(sc.next()){
-			case "add" : add(); break;
-			case "buy" : search(); break;
-			case "remove" : remove(); break;
-			case "search" : search(); break;
-			default : break;
-		} 		
-	}
-
 		@Override
 	public void actionPerformed(ActionEvent e){
 	}
 
 	public static void search(){
-		System.out.println("Please type the name of the item");
-		String name = sc.next();
+
+
+
+
 	}
 
 	public static void add(){
-		System.out.println("Please type the name of the item");
-		String name = sc.next();
+		
+		
 	}
 
 	public static void remove(){
-		System.out.println("Please type the name of the item");
-		String name = sc.next();
+		
+		
 	}
 
 	public static void buy(){
-		System.out.println("Please type the name of the item");
-		String name = sc.next();
+		
+		
 	}
-
-
 	
 }
