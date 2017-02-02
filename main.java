@@ -3,7 +3,7 @@ import java.util.ArrayList;
 //import Store;
 public class main{
 	static Scanner sc = new Scanner(System.in);
-	static ArrayList<Store> stores = new ArrayList<Store>();
+	static Store stores = new Store();
 
 	public static void main(String[] args){
 		System.out.println("Do you want to create a new store or see an existing one?");
@@ -28,20 +28,43 @@ public class main{
 		double lat = sc.nextDouble();
 		double lon = sc.nextDouble();
 		stores.add(new Store(name, owner, number, lat, lon));
+		doAction();
 	}
 
 	public static void defaultStore(){
-		stores.add(new Store("Default", "defaultOwner", "9738738224", 74, -77));
+		stores = new Store("Default", "defaultOwner", "9738738224", 74, -77);		
+		doAction();
 	}
 
+	public static void doAction(){
+		System.out.println("What action do you want to do?\n(add, buy, remove, search)");
+		switch(sc.next()){
+			case "add" : add(); break;
+			case "buy" : search(); break;
+			case "remove" : remove(); break;
+			case "search" : search(); break;
+			default : break;
+		} 		
+	}
 
+	public static void search(){
+		System.out.println("Please type the name of the item");
+		String name = sc.next();
+	}
 
+	public static void add(){
+		System.out.println("Please type the name of the item");
+		String name = sc.next();
+	}
 
+	public static void remove(){
+		System.out.println("Please type the name of the item");
+		String name = sc.next();
+	}
 
-
-
-
-
-
-
+	public static void buy(){
+		System.out.println("Please type the name of the item");
+		String name = sc.next();
+	}
+	
 }
