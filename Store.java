@@ -21,15 +21,30 @@ public class Store{
 		this.latiutude = lat;
 	}
 
-	public void setNewOwner(String owner){
+	public String getStoreName(){
+		return storeName;
+	}
+
+	public String getOwner(){
+		return owner;
+	}
+
+	public String getPhone(){
+		return phoneNumber;
+	}
+
+	public  double getLong(){
+		return longitude;
+	}
+
+	public double getLat(){
+		return latiutude;
+	}
+
+	public void setAttributes(String name, String owner, String phone, double lon, double lat){
+		this.storeName = name;
 		this.owner = owner;
-	}
-
-	public void setPhoneNum(String phoneNum){
-		this.phoneNumber = phoneNumber;
-	}
-
-	public void setLocation(double lat, double lon){
+		this.phoneNumber = phone;
 		this.latiutude = lat;
 		this.longitude = lon;
 	}
@@ -37,10 +52,7 @@ public class Store{
 	public void addItem(Item newItem){
 		stock.add(newItem);
 		itemNames.add(newItem.getName());
-	}
-
-	public void addNewItem(String itemName, int amount, double sellPrice, double buyPrice, String description){
-		stock.add(new Item(itemName, sellPrice, buyPrice, amount, description));
+		System.out.println("Item added with name " + newItem.getName());
 	}
 
 	public boolean buyItemWithName(String name, int numberOfItems){
@@ -51,30 +63,40 @@ public class Store{
 		}
 	}
 
+	public void restockItem(String name, int amount){
+		int index = itemNames.indexOf(name);
+		stock.get(index).restockItem(amount);
+	}
+
 	public void removeItem(String name){
 		int index = itemNames.indexOf(name);
 		stock.remove(index);
 		itemNames.remove(index);
 	}
 
-	public double searchItemSellPrice(String itemName){
+	public String searchItemSellPrice(String itemName){
 		int index = itemNames.indexOf(itemName);
-		return stock.get(index).getSellPrice();
+		return Double.toString(stock.get(index).getSellPrice());
 	}
 
-	public double searchItemBuyPrice(String itemName){
+	public String searchItemBuyPrice(String itemName){
 		int index = itemNames.indexOf(itemName);
-		return stock.get(index).getBuyPrice();	
+		return Double.toString(stock.get(index).getBuyPrice());	
 	}
 
-	public int searchItemStock(String itemName){
+	public String searchItemStock(String itemName){
 		int index = itemNames.indexOf(itemName);
-		return stock.get(index).getAmout();
+		return Integer.toString(stock.get(index).getAmout());
 	} 
 
 	public boolean searchIsInStock(String itemName){
 		int index = itemNames.indexOf(itemName);
 		return stock.get(index).isInStock();
+	}
+
+	public String searchItemDescription(String itemName){
+		int index = itemNames.indexOf(itemName);
+		return stock.get(index).getDescription();
 	}
 
 }
@@ -91,6 +113,15 @@ class Item{
 		this.name = name;
 		this.sellPrice = sellPrice;
 		this.buyPrice = buyPrice;
+		this.amount = amount;
+		this.description = description;
+		if (amount > 0) this.inStock = true;
+	}
+
+	public Item(String name, double sellPrice, int amount, String description){
+		this.name = name;
+		this.sellPrice = sellPrice;
+		this.buyPrice = 3 * sellPrice;
 		this.amount = amount;
 		this.description = description;
 		if (amount > 0) this.inStock = true;
@@ -116,7 +147,7 @@ class Item{
 	}
 
 	public boolean soldItem(int numberOfItems){
-		if(amount < 1) return false;
+		if(numberOfItems > amount) return false;
 		amount -= numberOfItems;
 		return true;
 	}
@@ -125,8 +156,8 @@ class Item{
 		this.description = description;
 	}
 
-	public void setItemAmount(int newAmount) {
-		this.amount = newAmount;
+	public void restockItem(int amount){
+		this.amount += amount;
 	}
 
 	public void setSellPrice(double sellPrice){
