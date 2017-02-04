@@ -3,4 +3,9 @@ Mehul, Ausin, Alden
 1-800-555-5555
 -74.0
 40.0
-0
+1
+Potatoe
+Yummy Stuff
+2.0
+6.0
+100

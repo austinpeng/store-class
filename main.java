@@ -65,7 +65,7 @@ public class main extends JFrame implements ActionListener{
 	public void setUpStore(){
 		try{
 			
-			Scanner sc = new Scanner(new File("/Users/alden/Developer/Java/Other/Store/store-class/saves.txt"));
+			Scanner sc = new Scanner(new File("saves.txt"));
 
 			String name = sc.nextLine();
 			String owner = sc.nextLine();
