@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 public class Store{
 
@@ -10,7 +11,10 @@ public class Store{
 
 	public Store(){
 		storeName = "New Store";
-		owner = "NaP";
+		owner = "No Person";
+		phoneNumber = "No Phone Number";
+		longitude = 0.0;
+		latiutude = 0.0;
 	}
 
 	public Store(String name, String owner, String phoneNumber, double lon, double lat){
@@ -19,6 +23,14 @@ public class Store{
 		this.phoneNumber = phoneNumber;
 		this.longitude = lon;
 		this.latiutude = lat;
+	}
+
+	public ArrayList<Item> getItems(){
+		return stock;
+	}
+
+	public ArrayList<String> getItemNames(){
+		return itemNames;
 	}
 
 	public String getStoreName(){
@@ -52,7 +64,6 @@ public class Store{
 	public void addItem(Item newItem){
 		stock.add(newItem);
 		itemNames.add(newItem.getName());
-		System.out.println("Item added with name " + newItem.getName());
 	}
 
 	public boolean buyItemWithName(String name, int numberOfItems){
@@ -86,7 +97,7 @@ public class Store{
 
 	public String searchItemStock(String itemName){
 		int index = itemNames.indexOf(itemName);
-		return Integer.toString(stock.get(index).getAmout());
+		return Integer.toString(stock.get(index).getAmount());
 	} 
 
 	public boolean searchIsInStock(String itemName){
@@ -189,7 +200,7 @@ class Item{
 		return name;
 	}
 
-	public int getAmout(){
+	public int getAmount(){
 		return amount;
 	}
 

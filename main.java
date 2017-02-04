@@ -1,3 +1,4 @@
+
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
@@ -6,10 +7,9 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.util.Iterator;
+import java.io.*;
 
-//import Store
 public class main extends JFrame implements ActionListener{
-	//static Scanner sc = new Scanner(System.in);
 	Store store = new Store();
 
 	JButton searchForItem = new JButton("Search");
@@ -26,11 +26,10 @@ public class main extends JFrame implements ActionListener{
 
 
 	public static void main(String[] args){
-		thisGUI = new main("TEST");
+		thisGUI = new main("Store");
 		thisGUI.setSize(890, 300);
 		thisGUI.setVisible(true);
-		thisGUI.defaultStore();
-
+		thisGUI.setUpStore();
 	}
 
 	JPanel gui = new JPanel(new GridLayout(0, 1));
@@ -63,12 +62,30 @@ public class main extends JFrame implements ActionListener{
 
 	}
 
-	public void defaultStore(){
-		store = new Store("Default", "defaultOwner", "9738738224", 74, -77);		
-		Item firstStoreItem = new Item("Default Item", 0.5, 3, 15, "This is a random Item");
-		Item secondStoreItem = new Item("Second Item", 0.5, 3, 15, "This is a random Item");
-		store.addItem(firstStoreItem);
-		store.addItem(secondStoreItem);
+	public void setUpStore(){
+		try{
+			
+			Scanner sc = new Scanner(new File("/Users/alden/Developer/Java/Other/Store/store-class/saves.txt"));
+
+			String name = sc.nextLine();
+			String owner = sc.nextLine();
+			String phone = sc.nextLine();
+			double lat = sc.nextDouble();
+			double lon = sc.nextDouble();
+			store = new Store(name, owner, phone, lon, lat);
+			int run = Integer.parseInt(sc.next());
+			for(int i = 0; i < run; i++){
+				String blanck = sc.nextLine();
+				String itemName = sc.nextLine();
+				String des = sc.nextLine();
+				double sellPrice = Double.parseDouble(sc.next());
+				double buyPrice = Double.parseDouble(sc.next());
+				int amountOfItem = Integer.parseInt(sc.next());
+				store.addItem(new Item(itemName, sellPrice, buyPrice, amountOfItem, des));	
+			}
+		}catch(Exception e){
+			displayError("There was a problem loading the save");
+		}
 	}
 
 		@Override
@@ -86,6 +103,7 @@ public class main extends JFrame implements ActionListener{
 			case "Store" : thisGUI.editStore(true); break;
 			case "Continue" : thisGUI.editStore(false); break;
 			case "Cancel" : thisGUI.cancel(); break;
+			case "Save" : thisGUI.save(); break;
 			default : 
 				if(actionName.contains("Remove")){
 					thisGUI.remove(actionName.replace("Remove ", ""));
@@ -98,6 +116,11 @@ public class main extends JFrame implements ActionListener{
 				}
 		}
 
+	}
+
+	public void displayError(String message){
+		int button = JOptionPane.PLAIN_MESSAGE;
+		JOptionPane.showMessageDialog(null, message, "Error" , button);
 	}
 
 	ArrayList<JTextField> textFields = new ArrayList<JTextField>();
@@ -148,7 +171,7 @@ public class main extends JFrame implements ActionListener{
 			gui.add(fiveButtons);
 			buyItemPanel.removeAll();
 			amountOfItem = new JTextField(15);
-			isAdding = false;
+			isBuying = false;
 		}else if (isEditing){
 			gui.remove(storeWords);
 			gui.remove(storeTextPanel);
@@ -171,7 +194,7 @@ public class main extends JFrame implements ActionListener{
 			storeWords.add(new JLabel("Longitude: "));
 			storeWords.add(new JLabel("Latitude: "));
 			for (int i = 0; i < 5; i ++){
-				JTextField newTextField = new JTextField(10);
+				JTextField newTextField = new JTextField(25);
 				switch(i){
 					case 0: newTextField.setText(store.getStoreName()); break;
 					case 1: newTextField.setText(store.getOwner()); break;
@@ -210,14 +233,14 @@ public class main extends JFrame implements ActionListener{
 				displayError("Please fill out everything with correct data types");
 			}
 		}
-		
+
 		this.repaint();
 		this.revalidate();
 	}
 
 	public void search(String searchItem){
 		if (searchItem.equals("")){
-			Iterator it = store.itemNames.iterator();
+			Iterator it = store.getItemNames().iterator();
 			while(it.hasNext()){
 				String nextItem = (String) it.next();
 				JButton newButton = new JButton(nextItem);
@@ -237,6 +260,7 @@ public class main extends JFrame implements ActionListener{
 			gui.remove(searchPanel);
 			searchPanel.removeAll();
 			JLabel nameLabel = new JLabel("Name: " + searchItem);
+			JLabel sellPrice = new JLabel("Sell Price: " + store.searchItemSellPrice(searchItem));
 			JLabel buyPrice = new JLabel("Buy Price: " + store.searchItemBuyPrice(searchItem));
  			JLabel stockOfItem = new JLabel(store.searchIsInStock(searchItem) ? "Stock: " + store.searchItemStock(searchItem) : searchItem + " is not in stock");
  			JLabel description = new JLabel("Description: " + store.searchItemDescription(searchItem));
@@ -245,6 +269,7 @@ public class main extends JFrame implements ActionListener{
 
  			searchInfo.add(nameLabel);
  			searchInfo.add(description);
+ 			searchInfo.add(sellPrice);
  			searchInfo.add(buyPrice);
  			searchInfo.add(stockOfItem);
  			searchInfo.add(backButton);
@@ -265,7 +290,7 @@ public class main extends JFrame implements ActionListener{
 			addButton.addActionListener(this);
 			propmptPanel.add(addButton);
 			for (int i = 0; i < 4; i++){
-				JTextField newTextField = new JTextField(10);
+				JTextField newTextField = new JTextField(25);
 				textBoxPanel.add(newTextField);
 				textFields.add(newTextField);
 			}
@@ -300,15 +325,12 @@ public class main extends JFrame implements ActionListener{
 		this.revalidate();
 	}
 
-	public void displayError(String message){
-		int Button = JOptionPane.PLAIN_MESSAGE;
-				JOptionPane.showMessageDialog(null, message, "Error" , Button);
-	}
+	
 
 	public void restock(String itemName){
 		if(itemName.equals("")){
 			restockPanel.add(addAmount);
-			Iterator it = store.itemNames.iterator();
+			Iterator it = store.getItemNames().iterator();
 			while(it.hasNext()){
 				String nextItem = (String) it.next();
 				JButton newButton = new JButton("Restock " + nextItem);
@@ -338,7 +360,7 @@ public class main extends JFrame implements ActionListener{
 
 	public void remove(String itemName){
 		if(itemName.equals("")){
-			Iterator it = store.itemNames.iterator();
+			Iterator it = store.getItemNames().iterator();
 			while(it.hasNext()){
 				String nextItem = (String) it.next();
 				JButton newButton = new JButton("Remove " + nextItem);
@@ -362,7 +384,7 @@ public class main extends JFrame implements ActionListener{
 	public void buy(String itemName){
 		if (itemName.equals("")){
 			buyItemPanel.add(amountOfItem);
-			Iterator it = store.itemNames.iterator();
+			Iterator it = store.getItemNames().iterator();
 			while(it.hasNext()){
 				String nextItem = (String) it.next();
 				JButton newButton = new JButton("Buy " + nextItem);
@@ -393,7 +415,29 @@ public class main extends JFrame implements ActionListener{
 	}
 
 	public void save(){
-
+		try{
+			PrintWriter writer = new PrintWriter("saves.txt", "UTF-8");
+			writer.println(store.getStoreName());
+			writer.println(store.getOwner());
+			writer.println(store.getPhone());
+			writer.println(store.getLat());
+			writer.println(store.getLong());
+			ArrayList<Item> items = store.getItems();
+			writer.println(items.size());
+			for(int i = 0; i < items.size(); i++){
+				Item thisItem = store.getItems().get(i);
+				writer.println(thisItem.getName());
+				writer.println(thisItem.getDescription());
+				writer.println(thisItem.getSellPrice());
+				writer.println(thisItem.getBuyPrice());
+				writer.println(thisItem.getAmount());
+			}
+			int Button = JOptionPane.PLAIN_MESSAGE;
+			JOptionPane.showMessageDialog(null, "Save was successful", "Save Progress" , Button);
+			writer.close();
+		}catch(Exception e){
+			displayError("Info Could Not be Saved");
+		}
 	}
 	
 }
