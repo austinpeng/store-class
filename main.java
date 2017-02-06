@@ -401,6 +401,8 @@ public class main extends JFrame implements ActionListener{
 			try{
 				int amount = Integer.parseInt(amountOfItem.getText());
 				if(store.buyItemWithName(itemName, amount)){
+					int button = JOptionPane.PLAIN_MESSAGE;
+					JOptionPane.showMessageDialog(null, "You bought " + amount + " " + itemName, "Item Sold" , button);
 					cancel();
 				}else{
 					displayError("There are not enough Items\nfor you to buy that many");
